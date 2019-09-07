@@ -1,0 +1,27 @@
+<ion-view>
+	<ion-nav-title>查看</ion-nav-title>
+	<ion-content overflow-scroll="true">
+		<div class="list card img-list">
+			<div class="item item-image">
+				<img style="height:360px;" ng-src="{{imgSrc}}">
+			</div>
+		</div>
+		<ul class="list">
+			<li class="explain">详细介绍
+			</li>
+			<li class="item comm">
+				<span class="texts xq">说明</span>
+				<span>{{content}}</span>
+			</li>
+			<li class="item comm">
+				<span class="texts">位置</span>
+				<span id="loc">{{address}}</span>
+			</li>
+			<li class="item comm">
+				<span class="texts">时间</span>
+				<span ng-bind="time">{{time}}</span>
+			</li>
+		</ul>
+	</ion-content>
+</ion-view> 
+

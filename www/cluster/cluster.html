@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <!-- Use correct character set. -->
+  <meta charset="utf-8">
+  <!-- Tell IE to use the latest, best version. -->
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <!-- Make the application on mobile take up the full browser screen and disable user scaling. -->
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no">
+  <title>cluster</title>
+  <script src="../Cesium/Cesium.js"></script>
+  <script type="text/javascript" src="../js/jquery-1.10.1.min.js"></script>
+  <style>
+	@import url(../Cesium/Widgets/widgets.css);
+        html, body, #cesiumContainer {
+            width: 100%;
+            height: 100%;
+            margin: 0;
+            padding: 0;
+            overflow: hidden;
+        }
+    #toolbar {
+		display: block;
+		position: absolute;
+		top: 10px;
+		left: 10px;
+        background: rgba(204, 204, 204, 0.5);
+        padding: 4px;
+        border-radius: 4px;
+    }
+    #toolbar input {
+        vertical-align: middle;
+        padding-top: 2px;
+        padding-bottom: 2px;
+    }
+  </style>
+  <script type="text/javascript">
+	var viewer;
+	function Init(){
+		viewer = new Cesium.Viewer('cesiumContainer');	
+		$('.cesium-viewer-bottom').remove();
+		$('.cesium-viewer-toolbar').remove();	
+		$('.cesium-viewer-animationContainer').remove();
+		$('.cesium-viewer-timelineContainer').remove();
+		
+		loadGeojsonWithCluster('clusterTest.geojson');
+		
+		viewer.camera.flyTo({
+			destination : new Cesium.Cartesian3.fromDegrees(116.39084050869829,39.91543549419339,1000000),
+			orientation : {
+				heading : Cesium.Math.toRadians(0),
+				pitch : Cesium.Math.toRadians(-90),
+				roll : Cesium.Math.toRadians(0)
+			},
+			duration : 1
+		});
+	}
+	
+	function loadGeojsonWithCluster(url){
+		//geojson图标地址Build\Cesium\Assets\Textures\maki
+		var dataSourcePromise = viewer.dataSources.add(Cesium.GeoJsonDataSource.load(url));
+		dataSourcePromise.then(function(dataSource) {
+			var entities = dataSource.entities.values;
+			for(var o = 0;o < entities.length; o++){
+				var iconPath = entities[o].properties.icon;
+				if(iconPath!=undefined){
+					entities[o].billboard.image = iconPath.getValue();
+				}
+			}
+			
+			var pixelRange = 20;//设置聚合距离
+			var minimumClusterSize = 3;//聚合起始数
+			var enabled = true;
+		
+			dataSource.clustering.enabled = enabled;
+			dataSource.clustering.pixelRange = pixelRange;
+			dataSource.clustering.minimumClusterSize = minimumClusterSize;
+
+			//聚合图标
+			var pinBuilder = new Cesium.PinBuilder();
+			var pin50 = pinBuilder.fromText('50+', Cesium.Color.RED, 48).toDataURL();
+			var pin40 = pinBuilder.fromText('40+', Cesium.Color.ORANGE, 48).toDataURL();
+			var pin30 = pinBuilder.fromText('30+', Cesium.Color.YELLOW, 48).toDataURL();
+			var pin20 = pinBuilder.fromText('20+', Cesium.Color.GREEN, 48).toDataURL();
+			var pin10 = pinBuilder.fromText('10+', Cesium.Color.BLUE, 48).toDataURL();
+			var singleDigitPins = new Array(10 - minimumClusterSize + 1);
+			for (var i = 0; i < singleDigitPins.length; ++i) {
+				singleDigitPins[i] = pinBuilder.fromText('' + (i + (minimumClusterSize - 1)), Cesium.Color.VIOLET, 48).toDataURL();
+			}
+			
+			//聚合后改变图标
+			dataSource.clustering.clusterEvent.addEventListener(function(clusteredEntities, cluster) {
+				cluster.label.show = false;
+				cluster.billboard.show = true;
+				cluster.billboard.id = cluster.label.id;
+				cluster.billboard.verticalOrigin = Cesium.VerticalOrigin.BOTTOM;
+	
+				if (clusteredEntities.length >= 50) {
+					cluster.billboard.image = pin50;
+				} else if (clusteredEntities.length >= 40) {
+					cluster.billboard.image = pin40;
+				} else if (clusteredEntities.length >= 30) {
+					cluster.billboard.image = pin30;
+				} else if (clusteredEntities.length >= 20) {
+					cluster.billboard.image = pin20;
+				} else if (clusteredEntities.length >= 10) {
+					cluster.billboard.image = pin10;
+				} else if(clusteredEntities.length >= 3){
+					cluster.billboard.image = singleDigitPins[clusteredEntities.length - minimumClusterSize + 1];
+				}
+			});
+		});
+	}
+	
+	
+
+	
+  </script>
+</head>
+<body onload="Init()" style="background: #000;">
+  <div id="cesiumContainer"></div>
+</body>
+</html>

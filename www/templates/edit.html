@@ -1,0 +1,40 @@
+<ion-view>
+	<ion-nav-title>编辑</ion-nav-title>
+	<ion-nav-buttons side="right">
+		<span class="progress">{{upProgress}}</span>
+		 <button class="button" ng-click="upload()">提交</button>
+	 </ion-nav-buttons>
+	<ion-content overflow-scroll="true" style="overflow: hidden">
+		<div class="row row-wrap pic">
+			<span class="col col-25" ng-if="camera">
+				<img ng-src="{{camera}}" ng-style="{'height':'{{imgheight}}'}" width="100%" />
+			</span>
+			<span class="col col-25"  ng-repeat="picture in pictures">
+				<img ng-src="{{picture}}" ng-style="{'height':'{{imgheight}}'}" width="100%" />
+			</span>
+			<span class="col col-25">
+				<img src="./img/jia_18.png" ng-click="upshow()" width="100%" />
+			</span>
+		</div>
+		<div class="foot">
+			<ul class="list">
+				<li class="explain">说明
+				</li>
+				<li class="item comm">
+					<span class="texts xq">心情</span>
+					<textarea class="areawz" ng-style="{'width':'{{awidth}}'}" ng-model='data.content'></textarea>
+				</li>
+				<li class="item comm">
+					<span class="texts">位置</span>
+					<span ng-bind="address"></span>
+				</li>
+				<li class="item comm">
+					<span class="texts">时间</span>
+					<span ng-bind="time"></span>
+				</li>
+			</ul>
+		</div>
+		
+		
+	</ion-content>
+</ion-view> 

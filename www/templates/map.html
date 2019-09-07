@@ -1,0 +1,48 @@
+<ion-view hide-nav-bar="true" hide-back-button="true">
+	<ion-nav-title></ion-nav-title>
+	<ion-content overflow-scroll="true" style="overflow: hidden">
+		<app-map class="cesiumStyle" lat="{{ctrlLat}}" lng="{{ctrlLng}}"> </app-map>
+		<div class="toolbar-right" ng-style="{'margin-top':'{{rHeight}}'}">
+			<ul>
+				<li onclick="sightControl()">
+					<a href="javascript:void(0);" id="sightControl">3D</a>
+				</li>
+
+				<li onclick="LocateDirection('north')" id="qw">
+					<a href="javascript:void(0);"><img class="imgtrans" src="./img/44_10.png"></a>
+				</li>
+
+				<li ontouchstart="changeCamera(id)" ontouchend="stopChange()" id="+">
+					<a href="javascript:void(0);"><img src="./img/22_09.png"></a>
+				</li>
+
+				<li ontouchstart="changeCamera(id)" ontouchend="stopChange()" id="-">
+					<a href="javascript:void(0);"><img src="./img/33_10.png"></a>
+				</li>
+			</ul>
+		</div>
+
+		<div class="tabs tabs-icon-left">
+			<a class="tab-item" onclick="tabs(0,this)">
+				<i class="icon ion-home"></i>测量
+				<ul class="uls">
+					<li onclick="DrawLine()">距离测量</li>
+					<li onclick="DrawArea()">面积测量</li>
+					<li onclick="CleanUpDraws()">清除</li>
+				</ul>
+			</a>
+			<a class="tab-item" onclick="tabs(1,this)">
+				<i class="icon ion-star"></i>图层
+				<ul class="uls">
+					<li onclick="layer(0,this)">基础地形</li>
+					<li onclick="layer(1,this)">电子地图</li>
+					<li onclick="layer(2,this)">标注</li>
+				</ul>
+			</a>
+			<a class="tab-item" ng-click="upshow()">
+				<i class="icon ion-gear-a"></i>编辑
+			</a>
+		</div>
+	</ion-content>
+</ion-view> 
+

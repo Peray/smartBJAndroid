@@ -1,0 +1,23 @@
+<ion-view hide-nav-bar="true" hide-back-button="true">
+	<ion-nav-title></ion-nav-title>
+	<ion-content overflow-scroll="true" style="overflow: hidden">
+		<form class="form" name="loginForm" ng-submit="subForm(loginForm.$valid)" novalidate>
+			<div class="list list-inset" ng-style="listpadding">
+				<label class="item item-input">
+					<input id="userPhone" type="text" name="userPhone" ng-model="data.userPhone" ng-pattern="/^1[3|4|5|8][0-9]\d{4,8}$/" ng-minlength="11" placeholder="手机号码" required />
+				</label>
+				<div class="item item-input">
+					<input type="text" name="usercode" placeholder="验证码" ng-model="data.usercode" required />
+					<button class="button button-small button-calm" ng-disabled="loginForm.userPhone.$invalid || logincode" ng-click="code()" ng-cloak>{{codes}}</button>
+				</div>
+			</div>
+			<p class="error" ng-if="loginForm.userPhone.$error.required&&loginForm.userPhone.$touched">手机号码不能为空！</p>
+			<p class="error" ng-if="(loginForm.userPhone.$error.minlength||loginForm.userPhone.$error.maxlength||loginForm.userPhone.$error.pattern)&& loginForm.userPhone.$touched">请输入有效手机号!</p>
+
+			<p class="error" ng-if="loginForm.usercode.$error.required&&loginForm.usercode.$touched">验证码不能为空！</p>
+			<div class="padding">
+				<button class="button button-block button-calm" ng-disabled="loginForm.$invalid">登录</button>
+			</div>
+		</form>
+	</ion-content>
+</ion-view>
